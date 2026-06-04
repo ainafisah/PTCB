@@ -1,0 +1,522 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+<title>Teacher Dashboard</title>
+
+<style>
+
+*{
+margin:0;
+padding:0;
+box-sizing:border-box;
+font-family:'Segoe UI',sans-serif;
+}
+
+:root{
+--primary:#2E7D32;
+--secondary:#4CAF50;
+--light:#E8F5E9;
+--white:#fff;
+}
+
+body{
+background:var(--light);
+}
+
+header{
+background:linear-gradient(
+135deg,
+var(--primary),
+var(--secondary)
+);
+color:white;
+padding:20px;
+display:flex;
+justify-content:space-between;
+align-items:center;
+flex-wrap:wrap;
+}
+
+.logout{
+background:#d32f2f;
+color:white;
+border:none;
+padding:10px 15px;
+border-radius:8px;
+cursor:pointer;
+}
+
+.container{
+max-width:1200px;
+margin:auto;
+padding:20px;
+}
+
+.stats{
+display:grid;
+grid-template-columns:
+repeat(auto-fit,minmax(220px,1fr));
+gap:15px;
+margin-bottom:20px;
+}
+
+.stat-card{
+background:white;
+padding:20px;
+border-radius:15px;
+box-shadow:0 3px 10px rgba(0,0,0,.1);
+text-align:center;
+}
+
+.card{
+background:white;
+padding:20px;
+border-radius:15px;
+margin-bottom:20px;
+box-shadow:0 3px 10px rgba(0,0,0,.1);
+}
+
+.card h2{
+color:var(--primary);
+margin-bottom:15px;
+}
+
+input,
+select,
+textarea{
+width:100%;
+padding:12px;
+margin-bottom:12px;
+border:1px solid #ccc;
+border-radius:8px;
+}
+
+textarea{
+height:120px;
+resize:none;
+}
+
+button{
+background:var(--primary);
+color:white;
+border:none;
+padding:12px;
+border-radius:8px;
+cursor:pointer;
+}
+
+button:hover{
+background:var(--secondary);
+}
+
+table{
+width:100%;
+border-collapse:collapse;
+}
+
+th{
+background:var(--primary);
+color:white;
+padding:10px;
+}
+
+td{
+padding:10px;
+border-bottom:1px solid #ddd;
+}
+
+.badge{
+background:#4CAF50;
+color:white;
+padding:5px 10px;
+border-radius:20px;
+font-size:12px;
+}
+
+</style>
+</head>
+
+<body>
+
+<script>
+
+if(localStorage.getItem("role")!=="teacher"){
+window.location="index.html";
+}
+
+</script>
+
+<header>
+
+<h1>👩‍🏫 Teacher Dashboard</h1>
+
+<button class="logout" onclick="logout()">
+Logout
+</button>
+
+</header>
+
+<div class="container">
+
+<div class="stats">
+
+<div class="stat-card">
+<h3>Students</h3>
+<h1 id="studentCount">0</h1>
+</div>
+
+<div class="stat-card">
+<h3>Reports Submitted</h3>
+<h1 id="reportCount">0</h1>
+</div>
+
+<div class="stat-card">
+<h3>Availability Slots</h3>
+<h1 id="availabilityCount">0</h1>
+</div>
+
+</div>
+
+<div class="card">
+
+<h2>👨‍🎓 Student List</h2>
+
+<table id="studentTable">
+
+<tr>
+<th>Name</th>
+<th>Subject</th>
+</tr>
+
+</table>
+
+</div>
+
+<div class="card">
+
+<h2>📝 Update Student Progress</h2>
+
+<select id="studentSelect">
+
+<option value="">
+Select Student
+</option>
+
+</select>
+
+<textarea
+id="progressComment"
+placeholder="Write student progress update...">
+</textarea>
+
+<button onclick="saveProgress()">
+Save Progress
+</button>
+
+</div>
+
+<div class="card">
+
+<h2>📚 Submitted Reports</h2>
+
+<div id="reportList">
+
+No reports available
+
+</div>
+
+</div>
+
+<div class="card">
+
+<h2>📅 Manage Availability</h2>
+
+<input
+type="date"
+id="availableDate">
+
+<input
+type="time"
+id="availableTime">
+
+<button onclick="addAvailability()">
+Add Availability
+</button>
+
+<br><br>
+
+<div id="availabilityList">
+No availability added
+</div>
+
+</div>
+
+</div>
+
+<script>
+
+function logout(){
+
+localStorage.removeItem("role");
+window.location="index.html";
+
+}
+
+let students=
+JSON.parse(
+localStorage.getItem("students")
+)||[];
+
+function loadStudents(){
+
+let table=
+document.getElementById(
+"studentTable"
+);
+
+table.innerHTML=`
+
+<tr>
+<th>Name</th>
+<th>Subject</th>
+</tr>
+
+`;
+
+let dropdown=
+document.getElementById(
+"studentSelect"
+);
+
+dropdown.innerHTML=`
+<option value="">
+Select Student
+</option>
+`;
+
+students.forEach(student=>{
+
+table.innerHTML+=`
+
+<tr>
+<td>${student.name}</td>
+<td>${student.subject}</td>
+</tr>
+
+`;
+
+dropdown.innerHTML+=`
+
+<option value="${student.name}">
+${student.name}
+</option>
+
+`;
+
+});
+
+document.getElementById(
+"studentCount"
+).innerText=
+students.length;
+
+}
+
+function saveProgress(){
+
+let student=
+document.getElementById(
+"studentSelect"
+).value;
+
+let comment=
+document.getElementById(
+"progressComment"
+).value;
+
+if(student==="" || comment===""){
+
+alert("Complete all fields");
+return;
+
+}
+
+let reports=
+JSON.parse(
+localStorage.getItem("updates")
+)||[];
+
+reports.push({
+
+student:student,
+comment:comment,
+teacher:
+localStorage.getItem("userEmail"),
+date:new Date()
+
+});
+
+localStorage.setItem(
+"updates",
+JSON.stringify(reports)
+);
+
+document.getElementById(
+"progressComment"
+).value="";
+
+loadReports();
+
+alert("Progress saved");
+
+}
+
+function loadReports(){
+
+let reports=
+JSON.parse(
+localStorage.getItem("updates")
+)||[];
+
+let container=
+document.getElementById(
+"reportList"
+);
+
+if(reports.length===0){
+
+container.innerHTML=
+"No reports available";
+
+}else{
+
+container.innerHTML="";
+
+reports.forEach(r=>{
+
+container.innerHTML+=`
+
+<p>
+
+<b>${r.student}</b>
+
+<br>
+
+${r.comment}
+
+</p>
+
+<hr>
+
+`;
+
+});
+
+}
+
+document.getElementById(
+"reportCount"
+).innerText=
+reports.length;
+
+}
+
+function addAvailability(){
+
+let date=
+document.getElementById(
+"availableDate"
+).value;
+
+let time=
+document.getElementById(
+"availableTime"
+).value;
+
+if(date==="" || time===""){
+
+alert("Select date and time");
+return;
+
+}
+
+let availability=
+JSON.parse(
+localStorage.getItem("availability")
+)||[];
+
+availability.push({
+
+date:date,
+time:time
+
+});
+
+localStorage.setItem(
+"availability",
+JSON.stringify(availability)
+);
+
+loadAvailability();
+
+}
+
+function loadAvailability(){
+
+let availability=
+JSON.parse(
+localStorage.getItem("availability")
+)||[];
+
+let container=
+document.getElementById(
+"availabilityList"
+);
+
+if(availability.length===0){
+
+container.innerHTML=
+"No availability added";
+
+}else{
+
+container.innerHTML="";
+
+availability.forEach(a=>{
+
+container.innerHTML+=`
+
+<p>
+
+📅 ${a.date}
+
+&nbsp;&nbsp;
+
+⏰ ${a.time}
+
+</p>
+
+`;
+
+});
+
+}
+
+document.getElementById(
+"availabilityCount"
+).innerText=
+availability.length;
+
+}
+
+loadStudents();
+loadReports();
+loadAvailability();
+
+</script>
+
+</body>
+</html>

@@ -1,0 +1,260 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+<title>PTCB Tutoring Management System</title>
+
+<style>
+
+*{
+margin:0;
+padding:0;
+box-sizing:border-box;
+font-family:'Segoe UI',sans-serif;
+}
+
+:root{
+--primary:#2E7D32;
+--secondary:#4CAF50;
+--light:#E8F5E9;
+--dark:#1B5E20;
+--white:#ffffff;
+}
+
+body{
+background:linear-gradient(
+135deg,
+#E8F5E9,
+#C8E6C9
+);
+height:100vh;
+display:flex;
+justify-content:center;
+align-items:center;
+padding:20px;
+}
+
+.login-card{
+
+background:white;
+width:100%;
+max-width:420px;
+
+padding:35px;
+
+border-radius:25px;
+
+box-shadow:
+0 10px 25px rgba(0,0,0,.15);
+
+text-align:center;
+}
+
+.logo{
+
+font-size:60px;
+margin-bottom:10px;
+
+}
+
+h1{
+
+color:var(--primary);
+margin-bottom:10px;
+
+}
+
+.subtitle{
+
+color:#666;
+margin-bottom:25px;
+
+}
+
+input,
+select{
+
+width:100%;
+padding:12px;
+
+margin-bottom:15px;
+
+border:2px solid #ddd;
+
+border-radius:10px;
+
+font-size:15px;
+
+}
+
+input:focus,
+select:focus{
+
+outline:none;
+border-color:var(--secondary);
+
+}
+
+button{
+
+width:100%;
+padding:14px;
+
+border:none;
+
+background:var(--primary);
+
+color:white;
+
+font-size:16px;
+
+border-radius:10px;
+
+cursor:pointer;
+
+transition:.3s;
+
+}
+
+button:hover{
+
+background:var(--secondary);
+
+}
+
+.footer{
+
+margin-top:20px;
+font-size:13px;
+color:#777;
+
+}
+
+</style>
+</head>
+
+<body>
+
+<div class="login-card">
+
+<div class="logo">
+📚
+</div>
+
+<h1>PTCB</h1>
+
+<p class="subtitle">
+Tutoring Management System
+</p>
+
+<input
+type="email"
+id="email"
+placeholder="Email">
+
+<input
+type="password"
+id="password"
+placeholder="Password">
+
+<select id="role">
+
+<option value="admin">
+Admin
+</option>
+
+<option value="teacher">
+Teacher
+</option>
+
+<option value="parent">
+Parent
+</option>
+
+<option value="customer">
+Customer
+</option>
+
+</select>
+
+<button onclick="login()">
+
+Login
+
+</button>
+
+<div class="footer">
+
+Empowering Learning & Progress Tracking
+
+</div>
+
+</div>
+
+<script>
+
+function login(){
+
+const email =
+document.getElementById("email").value;
+
+const password =
+document.getElementById("password").value;
+
+const role =
+document.getElementById("role").value;
+
+if(email==="" || password===""){
+
+alert("Please fill all fields");
+
+return;
+
+}
+
+localStorage.setItem(
+"role",
+role
+);
+
+localStorage.setItem(
+"userEmail",
+email
+);
+
+if(role==="admin"){
+
+window.location=
+"admin.html";
+
+}
+
+if(role==="teacher"){
+
+window.location=
+"teacher.html";
+
+}
+
+if(role==="parent"){
+
+window.location=
+"parent.html";
+
+}
+
+if(role==="customer"){
+
+window.location=
+"customer.html";
+
+}
+
+}
+
+</script>
+
+</body>
+</html>

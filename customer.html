@@ -1,0 +1,494 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+<title>Customer Dashboard</title>
+
+<style>
+
+*{
+margin:0;
+padding:0;
+box-sizing:border-box;
+font-family:'Segoe UI',sans-serif;
+}
+
+:root{
+--primary:#2E7D32;
+--secondary:#4CAF50;
+--light:#E8F5E9;
+--white:#ffffff;
+}
+
+body{
+background:var(--light);
+}
+
+header{
+background:linear-gradient(
+135deg,
+var(--primary),
+var(--secondary)
+);
+color:white;
+padding:20px;
+display:flex;
+justify-content:space-between;
+align-items:center;
+flex-wrap:wrap;
+}
+
+.logout{
+background:#d32f2f;
+color:white;
+border:none;
+padding:10px 15px;
+border-radius:8px;
+cursor:pointer;
+}
+
+.container{
+max-width:1200px;
+margin:auto;
+padding:20px;
+}
+
+.stats{
+display:grid;
+grid-template-columns:
+repeat(auto-fit,minmax(220px,1fr));
+gap:15px;
+margin-bottom:20px;
+}
+
+.stat-card{
+background:white;
+padding:20px;
+border-radius:15px;
+box-shadow:0 3px 10px rgba(0,0,0,.1);
+text-align:center;
+}
+
+.stat-card h3{
+color:var(--primary);
+margin-bottom:10px;
+}
+
+.card{
+background:white;
+padding:20px;
+border-radius:15px;
+margin-bottom:20px;
+box-shadow:0 3px 10px rgba(0,0,0,.1);
+}
+
+.card h2{
+color:var(--primary);
+margin-bottom:15px;
+}
+
+input,
+select{
+width:100%;
+padding:12px;
+margin-bottom:12px;
+border:1px solid #ccc;
+border-radius:8px;
+}
+
+button{
+background:var(--primary);
+color:white;
+border:none;
+padding:12px;
+border-radius:8px;
+cursor:pointer;
+}
+
+button:hover{
+background:var(--secondary);
+}
+
+table{
+width:100%;
+border-collapse:collapse;
+margin-top:10px;
+}
+
+th{
+background:var(--primary);
+color:white;
+padding:10px;
+}
+
+td{
+padding:10px;
+border-bottom:1px solid #ddd;
+}
+
+.available{
+color:green;
+font-weight:bold;
+}
+
+.booked{
+color:red;
+font-weight:bold;
+}
+
+.booking-card{
+background:#f5f5f5;
+padding:15px;
+border-radius:10px;
+margin-bottom:10px;
+}
+
+.cancel-btn{
+background:#d32f2f;
+margin-top:10px;
+}
+
+.cancel-btn:hover{
+background:#f44336;
+}
+
+@media(max-width:768px){
+
+header{
+flex-direction:column;
+gap:10px;
+}
+
+}
+
+</style>
+</head>
+
+<body>
+
+<script>
+
+if(localStorage.getItem("role")!=="customer"){
+window.location="index.html";
+}
+
+</script>
+
+<header>
+
+<h1>🏫 Hall Booking Portal</h1>
+
+<button class="logout" onclick="logout()">
+Logout
+</button>
+
+</header>
+
+<div class="container">
+
+<div class="stats">
+
+<div class="stat-card">
+<h3>Total Halls</h3>
+<h1>3</h1>
+</div>
+
+<div class="stat-card">
+<h3>Available Halls</h3>
+<h1>3</h1>
+</div>
+
+<div class="stat-card">
+<h3>My Bookings</h3>
+<h1 id="bookingCount">0</h1>
+</div>
+
+</div>
+
+<div class="card">
+
+<h2>🏫 Hall Availability</h2>
+
+<table>
+
+<tr>
+<th>Hall</th>
+<th>Capacity</th>
+<th>Status</th>
+</tr>
+
+<tr>
+<td>Hall A</td>
+<td>30 Students</td>
+<td class="available">
+Available
+</td>
+</tr>
+
+<tr>
+<td>Hall B</td>
+<td>50 Students</td>
+<td class="available">
+Available
+</td>
+</tr>
+
+<tr>
+<td>Hall C</td>
+<td>20 Students</td>
+<td class="available">
+Available
+</td>
+</tr>
+
+</table>
+
+</div>
+
+<div class="card">
+
+<h2>📅 Book a Hall</h2>
+
+<select id="hall">
+
+<option value="">
+Select Hall
+</option>
+
+<option>
+Hall A
+</option>
+
+<option>
+Hall B
+</option>
+
+<option>
+Hall C
+</option>
+
+</select>
+
+<input
+type="date"
+id="bookingDate">
+
+<input
+type="time"
+id="bookingTime">
+
+<select id="bookingType">
+
+<option>
+Tuition Class
+</option>
+
+<option>
+Workshop
+</option>
+
+<option>
+Seminar
+</option>
+
+<option>
+Meeting
+</option>
+
+</select>
+
+<button onclick="bookHall()">
+Book Hall
+</button>
+
+</div>
+
+<div class="card">
+
+<h2>📋 My Booking History</h2>
+
+<div id="bookingList">
+
+No bookings available
+
+</div>
+
+</div>
+
+</div>
+
+<script>
+
+function logout(){
+
+localStorage.removeItem("role");
+
+window.location="index.html";
+
+}
+
+function bookHall(){
+
+let hall=
+document.getElementById(
+"hall"
+).value;
+
+let date=
+document.getElementById(
+"bookingDate"
+).value;
+
+let time=
+document.getElementById(
+"bookingTime"
+).value;
+
+let type=
+document.getElementById(
+"bookingType"
+).value;
+
+if(
+hall==="" ||
+date==="" ||
+time===""){
+
+alert(
+"Please complete all fields"
+);
+
+return;
+
+}
+
+let bookings=
+JSON.parse(
+localStorage.getItem(
+"bookings"
+)
+)||[];
+
+bookings.push({
+
+hall:hall,
+date:date,
+time:time,
+type:type,
+status:"Pending"
+
+});
+
+localStorage.setItem(
+"bookings",
+JSON.stringify(bookings)
+);
+
+loadBookings();
+
+alert(
+"Hall booked successfully!"
+);
+
+}
+
+function loadBookings(){
+
+let bookings=
+JSON.parse(
+localStorage.getItem(
+"bookings"
+)
+)||[];
+
+let container=
+document.getElementById(
+"bookingList"
+);
+
+if(bookings.length===0){
+
+container.innerHTML=
+"No bookings available";
+
+}else{
+
+container.innerHTML="";
+
+bookings.forEach((b,index)=>{
+
+container.innerHTML+=`
+
+<div class="booking-card">
+
+<h3>${b.hall}</h3>
+
+<p>
+📅 ${b.date}
+</p>
+
+<p>
+⏰ ${b.time}
+</p>
+
+<p>
+📖 ${b.type}
+</p>
+
+<p>
+Status:
+<b>${b.status}</b>
+</p>
+
+<button
+class="cancel-btn"
+onclick="cancelBooking(${index})">
+
+Cancel Booking
+
+</button>
+
+</div>
+
+`;
+
+});
+
+}
+
+document.getElementById(
+"bookingCount"
+).innerText=
+bookings.length;
+
+}
+
+function cancelBooking(index){
+
+let bookings=
+JSON.parse(
+localStorage.getItem(
+"bookings"
+)
+);
+
+bookings.splice(index,1);
+
+localStorage.setItem(
+"bookings",
+JSON.stringify(bookings)
+);
+
+loadBookings();
+
+}
+
+loadBookings();
+
+</script>
+
+</body>
+</html>
+
