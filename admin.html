@@ -1,0 +1,1695 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>PTCB Admin Dashboard</title>
+
+<style>
+*{
+    margin:0;
+    padding:0;
+    box-sizing:border-box;
+    font-family:'Segoe UI',sans-serif;
+}
+
+:root{
+    --primary:#2E7D32;
+    --secondary:#4CAF50;
+    --light:#E8F5E9;
+    --danger:#d32f2f;
+}
+
+body{
+    background:var(--light);
+    display:flex;
+}
+
+.sidebar{
+    width:260px;
+    min-height:100vh;
+    background:linear-gradient(180deg,var(--primary),var(--secondary));
+    color:white;
+    padding:20px;
+    position:sticky;
+    top:0;
+}
+
+.sidebar h2{
+    font-size:20px;
+    margin-bottom:10px;
+}
+
+.sidebar p{
+    font-size:13px;
+    opacity:0.9;
+    margin-bottom:20px;
+}
+
+.nav-item{
+    padding:10px;
+    margin-bottom:10px;
+    border-radius:8px;
+    background:rgba(255,255,255,0.12);
+}
+
+.nav-item:hover{
+    background:rgba(255,255,255,0.25);
+}
+
+.container{
+    flex:1;
+    padding:20px;
+    max-width:1200px;
+}
+
+header{
+    background:white;
+    padding:15px 20px;
+    border-radius:12px;
+    display:flex;
+    justify-content:space-between;
+    align-items:center;
+    margin-bottom:20px;
+    box-shadow:0 3px 10px rgba(0,0,0,0.08);
+}
+
+header h1{
+    color:var(--primary);
+    font-size:20px;
+}
+
+.logout{
+    background:var(--danger);
+    border:none;
+    padding:10px 15px;
+    color:white;
+    border-radius:8px;
+}
+
+.stats{
+    display:grid;
+    grid-template-columns:repeat(auto-fit,minmax(200px,1fr));
+    gap:15px;
+    margin-bottom:20px;
+}
+
+.stats .card{
+    background:white;
+    padding:20px;
+    border-radius:15px;
+    box-shadow:0 3px 10px rgba(0,0,0,0.08);
+}
+
+.stats h3{
+    font-size:14px;
+    color:#666;
+}
+
+.stats h2{
+    color:var(--primary);
+    margin-top:5px;
+}
+
+.card{
+    background:white;
+    padding:20px;
+    border-radius:15px;
+    margin-bottom:20px;
+    box-shadow:0 3px 10px rgba(0,0,0,0.08);
+}
+
+.card h2{
+    color:var(--primary);
+    margin-bottom:15px;
+}
+
+input, select{
+    width:100%;
+    padding:10px;
+    margin:5px 0;
+    border-radius:8px;
+    border:1px solid #ccc;
+}
+
+button{
+    background:var(--primary);
+    color:white;
+    border:none;
+    padding:10px 15px;
+    border-radius:8px;
+    cursor:pointer;
+}
+
+button:hover{
+    background:var(--secondary);
+}
+
+table{
+    width:100%;
+    border-collapse:collapse;
+    margin-top:10px;
+}
+
+th, td{
+    padding:10px;
+    border-bottom:1px solid #ddd;
+    text-align:left;
+}
+
+.student-name{
+    display:flex;
+    align-items:center;
+    gap:8px;
+    font-weight:600;
+    color:var(--primary);
+}
+
+.subject-badge{
+    background:var(--light);
+    color:var(--primary);
+    padding:6px 12px;
+    border-radius:20px;
+    font-size:13px;
+    font-weight:600;
+}
+
+.progress-box{
+    background:#F9FFF9;
+    border-left:4px solid var(--secondary);
+    padding:10px;
+    border-radius:8px;
+}
+
+.calendar{
+    max-width:900px;
+    margin:auto;
+}
+
+.calendar-top{
+    display:flex;
+    justify-content:space-between;
+    align-items:center;
+    margin-bottom:15px;
+}
+
+.calendar-title{
+    font-size:22px;
+    font-weight:bold;
+    color:var(--primary);
+}
+
+.calendar-grid{
+    display:grid;
+    grid-template-columns:repeat(7,1fr);
+    gap:8px;
+}
+
+.day-name{
+    background:var(--primary);
+    color:white;
+    text-align:center;
+    padding:10px;
+    border-radius:8px;
+    font-weight:600;
+}
+
+.day{
+    background:white;
+    min-height:90px;
+    border-radius:10px;
+    padding:5px;
+    box-shadow:0 2px 6px rgba(0,0,0,.08);
+}
+
+.available{
+    background:var(--light);
+    border:2px solid var(--secondary);
+}
+
+.teacher-slot{
+    background:var(--secondary);
+    color:white;
+    padding:3px 6px;
+    border-radius:6px;
+    margin-top:3px;
+    font-size:11px;
+}
+
+.empty{
+    background:transparent;
+    box-shadow:none;
+}
+
+/* RESPONSIVE */
+@media(max-width:768px){
+    body{
+        flex-direction:column;
+    }
+
+    .sidebar{
+        width:100%;
+        min-height:auto;
+    }
+}
+
+.nav-item{
+    display:block;
+    padding:10px;
+    margin-bottom:10px;
+    border-radius:8px;
+    background:rgba(255,255,255,0.12);
+    color:white;
+    text-decoration:none;
+    transition:0.3s;
+}
+
+.nav-item:hover{
+    background:rgba(255,255,255,0.25);
+}
+
+.sidebar{
+    width:260px;
+    min-height:100vh;
+    background:linear-gradient(180deg,var(--primary),var(--secondary));
+    color:white;
+    padding:20px;
+    position:sticky;
+    top:0;
+    transition:0.3s;
+    overflow:hidden;
+}
+
+.sidebar.closed{
+    width:70px;
+    padding:20px 10px;
+}
+
+.sidebar.closed h2,
+.sidebar.closed p,
+.sidebar.closed .text{
+    display:none;
+}
+
+.sidebar.closed .nav-item{
+    justify-content:center;
+    padding:15px 0;
+}
+
+.sidebar.closed .nav-item{
+    padding:15px;
+}
+
+.container{
+    flex:1;
+    padding:20px;
+    transition:0.3s;
+}
+
+.menu-btn{
+    background:var(--primary);
+    color:white;
+    border:none;
+    border-radius:8px;
+    padding:10px 14px;
+    font-size:18px;
+    cursor:pointer;
+}
+
+.menu-btn:hover{
+    background:var(--secondary);
+}
+
+.sidebar.closed .text{
+    display:none;
+}
+
+.nav-item{
+    display:flex;
+    align-items:center;
+    gap:10px;
+}
+
+.nav-item span:first-child{
+    font-size:20px;
+}
+
+#scrollTopBtn{
+    position:fixed;
+    bottom:20px;
+    right:20px;
+    width:50px;
+    height:50px;
+    border-radius:50%;
+    border:none;
+    background:var(--primary);
+    color:white;
+    font-size:22px;
+    cursor:pointer;
+    box-shadow:0 4px 12px rgba(0,0,0,.2);
+    display:none;
+    z-index:999;
+    transition:.3s;
+}
+
+#scrollTopBtn:hover{
+    background:var(--secondary);
+    transform:translateY(-3px);
+}
+
+
+</style>
+</head>
+
+<body>
+
+<script>
+if(localStorage.getItem("role") !== "admin"){
+    window.location = "index.html";
+}
+</script>
+
+<div class="sidebar closed">
+    <h2>📚 Admin Panel</h2>
+    <p>School Management System</p>
+
+    <a href="#dashboard" class="nav-item">
+        <span>📊</span><span class="text"> Dashboard</span>
+    </a>
+
+    <a href="#students" class="nav-item">
+        <span>👨‍🎓</span><span class="text"> Students</span>
+    </a>
+
+    <a href="#halls" class="nav-item">
+        <span>🏫</span><span class="text"> Halls</span>
+    </a>
+
+    <a href="#bookings" class="nav-item">
+        <span>📅</span><span class="text"> Bookings</span>
+    </a>
+
+    <a href="#reports" class="nav-item">
+        <span>📝</span><span class="text"> Reports</span>
+    </a>
+
+    <a href="#calendar" class="nav-item">
+        <span>📆</span><span class="text"> Calendar</span>
+    </a>
+
+    <a href="#teachers" class="nav-item">
+        <span>👩‍🏫</span><span class="text"> Teachers</span>
+    </a>
+</div>
+
+<!-- MAIN -->
+<div class="container">
+
+    <header>
+        <div style="display:flex;align-items:center;gap:10px;">
+            <button class="menu-btn" onclick="toggleSidebar()">☰</button>
+            <h1>📚 Admin Dashboard</h1>
+        </div>
+
+        <button class="logout" id="dashboard" onclick="logout()">Logout</button>
+    </header>
+
+    <!-- STATS -->
+    <div class="stats">
+
+        <div class="card">
+            <h3>Students</h3>
+            <h2 id="studentCount">0</h2>
+        </div>
+
+        <div class="card">
+            <h3>Bookings</h3>
+            <h2 id="bookingCount">0</h2>
+        </div>
+
+        <div class="card">
+            <h3>Reports</h3>
+            <h2 id="reportCount">0</h2>
+        </div>
+
+        <div class="card">
+            <h3>Halls</h3>
+            <h2 id="hallCount">0</h2>
+        </div>
+
+    </div>
+
+    <div class="card">
+        <h2>📅 Class Timetable Management</h2>
+
+        <input type="date" id="ttDate" onchange="loadAvailableTeachers()">
+
+        <label>Start Time</label>
+        <input type="time" id="ttStartTime">
+
+        <label>End Time</label>
+        <input type="time" id="ttEndTime">
+
+        <input id="ttStudent" placeholder="Student Name">
+
+        <input id="ttSubject" placeholder="Subject">
+
+        <label>Main Teacher</label>
+            <select id="ttTeacher">
+                <option value="">Select Main Teacher</option>
+            </select>
+
+            <label>Backup Teacher</label>
+            <select id="ttBackupTeacher">
+                <option value="">Select Backup Teacher</option>
+            </select>
+        <button onclick="addTimetable()">
+            Add Timetable
+        </button>
+
+        <table>
+            <thead>
+                <tr>
+                    <th>Date</th>
+                    <th>Time Slot</th>
+                    <th>Student</th>
+                    <th>Subject</th>
+                    <th>Main Teacher</th>
+                    <th>Backup Teacher</th>
+                    <th>Action</th>
+                </tr>
+            </thead>
+
+            <tbody id="timetableTable"></tbody>
+        </table>
+    </div>
+    
+
+    <div class="card" id="students">
+        <h2>👨‍🎓 Add Student</h2>
+
+        <input id="studentName" placeholder="Student Name">
+        <input id="studentSubject" placeholder="Subject">
+        <input id="teacherEmail" placeholder="Teacher Email">
+        <input id="parentEmail" placeholder="Parent Email">
+
+        <button onclick="addStudent()">Add Student</button>
+
+        <table>
+            <thead>
+                <tr>
+                    <th>Name</th>
+                    <th>Subject</th>
+                    <th>Teacher</th>
+                    <th>Parent</th>
+                    <th>Action</th>
+                </tr>
+            </thead>
+            <tbody id="studentTable"></tbody>
+        </table>
+        <div style="text-align:right;margin-top:15px;">
+            <button onclick="scrollToTop()">⬆ Back to Top</button>
+        </div>
+    </div>
+
+    <div class="card" id="halls">
+        <h2>🏫 Hall Management</h2>
+
+        <input id="hallName" placeholder="Hall Name">
+        <input id="hallCapacity" placeholder="Capacity">
+        <input id="hallDesc" placeholder="Description">
+
+        <select id="hallStatus">
+            <option value="Available">Available</option>
+            <option value="Not Available">Not Available</option>
+        </select>
+
+        <button onclick="addHall()">Add Hall</button>
+
+        <table>
+            <thead>
+                <tr>
+                    <th>Name</th>
+                    <th>Capacity</th>
+                    <th>Description</th>
+                    <th>Status</th>
+                    <th>Action</th>
+                </tr>
+            </thead>
+            <tbody id="hallTable"></tbody>
+        </table>
+        <div style="text-align:right;margin-top:15px;">
+            <button onclick="scrollToTop()">⬆ Back to Top</button>
+        </div>
+    </div>
+
+    <div class="card" id="bookings">
+        <h2>📅 Hall Bookings</h2>
+        <div id="bookingList"></div>
+        <div style="text-align:right;margin-top:15px;">
+            <button onclick="scrollToTop()">⬆ Back to Top</button>
+        </div>
+    </div>
+
+    <div class="card" id="reports">
+        <h2>📝 Student Reports</h2>
+        <div id="reportList"></div>
+        <div style="text-align:right;margin-top:15px;">
+            <button onclick="scrollToTop()">⬆ Back to Top</button>
+        </div>
+    </div>
+
+    <div class="card" id="calendar">
+        <h2>📅 Teacher Availability Calendar</h2>
+        <div id="adminCalendar"></div>
+        <div style="text-align:right;margin-top:15px;">
+            <button onclick="scrollToTop()">⬆ Back to Top</button>
+        </div>
+    </div>
+
+    <div class="card" id="teachers">
+        <h2>👩‍🏫 Teacher Management</h2>
+
+        <table>
+            <thead>
+                <tr>
+                    <th>Name</th>
+                    <th>Email</th>
+                    <th>Action</th>
+                </tr>
+            </thead>
+
+            <tbody id="teacherTable"></tbody>
+        </table>
+        <div style="text-align:right;margin-top:15px;">
+            <button onclick="scrollToTop()">⬆ Back to Top</button>
+        </div>
+    </div>
+
+    <div class="card" id="weeklyGallery">
+
+        <h2>📸 Weekly Gallery Management</h2>
+
+        <select id="galleryYear">
+            <option value="">Select Year</option>
+        </select>
+
+        <select id="galleryMonth">
+            <option value="">Select Month</option>
+            <option value="1">January</option>
+            <option value="2">February</option>
+            <option value="3">March</option>
+            <option value="4">April</option>
+            <option value="5">May</option>
+            <option value="6">June</option>
+            <option value="7">July</option>
+            <option value="8">August</option>
+            <option value="9">September</option>
+            <option value="10">October</option>
+            <option value="11">November</option>
+            <option value="12">December</option>
+        </select>
+
+        <select id="galleryWeek">
+            <option value="">Select Week</option>
+            <option value="1">Week 1</option>
+            <option value="2">Week 2</option>
+            <option value="3">Week 3</option>
+            <option value="4">Week 4</option>
+        </select>
+
+        <input type="file"
+            id="galleryFiles"
+            multiple
+            accept="image/*">
+
+        <button onclick="uploadWeekGallery()">
+            Upload Gallery
+        </button>
+
+        <div id="galleryAdminList"></div>
+
+    </div>
+
+</div>
+
+</body>
+
+
+    <script>
+
+        const channel = new BroadcastChannel("ptcb-sync");
+
+        for(let y = 2025; y <= 2040; y++){
+
+            document.getElementById("galleryYear")
+                .innerHTML += `
+                    <option value="${y}">
+                        ${y}
+                    </option>
+                `;
+        }
+        function logout(){
+
+            localStorage.removeItem("role");
+            localStorage.removeItem("userEmail");
+
+            window.location = "index.html";
+        }
+
+        function addTimetable(){
+
+            let date =
+                document.getElementById("ttDate").value;
+
+            let startTime =
+                document.getElementById("ttStartTime").value;
+
+            let endTime =
+                document.getElementById("ttEndTime").value;
+
+            let student =
+                document.getElementById("ttStudent").value;
+
+            let subject =
+                document.getElementById("ttSubject").value;
+
+            let teacher =
+                document.getElementById("ttTeacher").value;
+
+            let backupTeacher =
+                document.getElementById("ttBackupTeacher").value;
+
+            if(
+                !date ||
+                !startTime ||
+                !endTime ||
+                !student ||
+                !subject ||
+                !teacher ||
+                !backupTeacher
+            ){
+                alert("Fill all fields");
+                return;
+            }
+
+            
+            // =========================
+            // CHECK TEACHER AVAILABILITY
+            // =========================
+
+            let timetables =
+                JSON.parse(localStorage.getItem("timetables")) || [];
+            let availability = 
+                JSON.parse(localStorage.getItem("availability")) || [];
+
+            let isAvailable = availability.some(a =>
+                a.teacherName === teacher &&
+                a.date === date &&
+                a.time === startTime
+            );
+
+            if(!isAvailable){
+                alert(
+                    "This teacher is not available on " +
+                    date +
+                    " at " +
+                    startTime
+                );
+                return;
+            }
+
+            if(teacher === backupTeacher){
+                alert("Main and Backup teacher cannot be the same.");
+                return;
+            }
+
+            let backupAvailable = availability.some(a =>
+                a.teacherName === backupTeacher &&
+                a.date === date &&
+                a.time === startTime
+            );
+
+            if(!backupAvailable){
+                alert(
+                    "Backup teacher is not available on " +
+                    date +
+                    " at " +
+                    startTime
+                );
+                return;
+            }
+
+            let backupBusy = timetables.some(t =>
+                (t.teacher === backupTeacher ||
+                t.backupTeacher === backupTeacher) &&
+                t.date === date &&
+                (
+                    (startTime >= t.startTime && startTime < t.endTime) ||
+                    (endTime > t.startTime && endTime <= t.endTime) ||
+                    (startTime <= t.startTime && endTime >= t.endTime)
+                )
+            );
+
+            if(backupBusy){
+                alert(
+                    "Backup teacher already has a class during this time."
+                );
+                return;
+            }
+
+            // =========================
+            // CHECK FOR TIMETABLE CLASH
+            // =========================
+
+            let teacherBusy = timetables.some(t =>
+                t.teacher === teacher &&
+                t.date === date &&
+                (
+                    (startTime >= t.startTime && startTime < t.endTime) ||
+                    (endTime > t.startTime && endTime <= t.endTime) ||
+                    (startTime <= t.startTime && endTime >= t.endTime)
+                )
+            );
+
+            if(teacherBusy){
+                alert("Teacher already has a class during this time.");
+                return;
+            }
+
+            // =========================
+            // SAVE TIMETABLE
+            // =========================
+
+            timetables.push({
+                id: Date.now(),
+                date,
+                startTime,
+                endTime,
+                student,
+                subject,
+                teacher,
+                backupTeacher
+            });
+
+            localStorage.setItem(
+                "timetables",
+                JSON.stringify(timetables)
+            );
+
+            channel.postMessage({
+                type:"timetable-update",
+                data:timetables
+            });
+
+            // Optional: remove used availability slot
+            availability = availability.filter(a =>
+                !(
+                    a.teacherName === teacher &&
+                    a.date === date &&
+                    a.time === startTime
+                )
+            );
+
+            localStorage.setItem(
+                "availability",
+                JSON.stringify(availability)
+            );
+
+            loadTimetables();
+            loadAdminCalendar();
+
+            alert("Timetable assigned successfully");
+        }
+
+        function deleteTimetable(id){
+
+            let timetables =
+                JSON.parse(localStorage.getItem("timetables")) || [];
+
+            timetables =
+                timetables.filter(t => t.id !== id);
+
+            localStorage.setItem(
+                "timetables",
+                JSON.stringify(timetables)
+            );
+
+            channel.postMessage({
+                type:"timetable-update",
+                data:timetables
+            });
+
+            loadTimetables();
+        }
+
+        function loadTimetables(){
+
+            let timetables =
+                JSON.parse(localStorage.getItem("timetables")) || [];
+
+            let table =
+                document.getElementById("timetableTable");
+
+            table.innerHTML = "";
+
+            timetables.sort((a, b) => {
+                return new Date(a.date + " " + a.startTime) -
+                    new Date(b.date + " " + b.startTime);
+            });
+
+            timetables.forEach(t => {
+
+                table.innerHTML += `
+                    <tr>
+                        <td>${t.date}</td>
+                        <td>${t.startTime} - ${t.endTime}</td>
+                        <td>${t.student}</td>
+                        <td>${t.subject}</td>
+                        <td>${t.teacher}</td>
+                        <td>${t.backupTeacher || "-"}</td>
+
+                        <td>
+                            <button onclick="deleteTimetable(${t.id})">
+                                Delete
+                            </button>
+                        </td>
+                    </tr>
+                `;
+            });
+        }
+
+        let students =
+            JSON.parse(localStorage.getItem("students")) || [];
+
+        let halls =
+            JSON.parse(localStorage.getItem("halls")) || [
+                { name:"Hall A", capacity:30, desc:"Tuition Hall", status:"Available" },
+                { name:"Hall B", capacity:50, desc:"Seminar Hall", status:"Available" },
+                { name:"Hall C", capacity:20, desc:"Meeting Room", status:"Available" }
+            ];
+
+        /* ================= STUDENTS ================= */
+
+        function addStudent(){
+
+            let name =
+                document.getElementById("studentName").value;
+
+            let subject =
+                document.getElementById("studentSubject").value;
+
+            let teacherEmail =
+                document.getElementById("teacherEmail").value;
+
+            let parentEmail =
+                document.getElementById("parentEmail").value;
+
+            if(name === "" || subject === "" || teacherEmail === "" || parentEmail === ""){
+                alert("Fill all fields");
+                return;
+            }
+
+            students.push({
+                id: Date.now(),
+                name: name.trim(),
+                subject: subject.trim(),
+                teacherEmail: teacherEmail.trim().toLowerCase(),
+                parentEmail: parentEmail.trim().toLowerCase()
+            });
+
+            localStorage.setItem("students", JSON.stringify(students));
+
+            channel.postMessage({
+                type: "students-update",
+                data: students
+            });
+
+            alert("Student Added");
+
+            loadStudents();
+        }
+
+        function deleteStudent(i){
+
+            students.splice(i, 1);
+
+            localStorage.setItem(
+                "students",
+                JSON.stringify(students)
+            );
+
+            channel.postMessage({
+                type: "students-update",
+                data: students
+            });
+
+            loadStudents();
+        }
+
+        function loadStudents(){
+
+            let table =
+                document.getElementById("studentTable");
+
+            table.innerHTML = "";
+
+            let previousName = "";
+
+            students.forEach((s, i) => {
+
+                table.innerHTML += `
+                    <tr>
+                        <td>${previousName === s.name ? "" : s.name}</td>
+                        <td>${s.subject}</td>
+                        <td>${s.teacherEmail}</td>
+                        <td>${s.parentEmail}</td>
+                        <td>
+                            <button onclick="deleteStudent(${i})">
+                                Delete
+                            </button>
+                        </td>
+                    </tr>
+                `;
+
+                previousName = s.name;
+            });
+
+            let uniqueStudents =
+                [...new Set(students.map(s => s.name))];
+
+            document.getElementById("studentCount").innerText =
+                uniqueStudents.length;
+        }
+
+        /* ================= HALLS ================= */
+
+        function addHall(){
+
+            let name =
+                document.getElementById("hallName").value;
+
+            let cap =
+                document.getElementById("hallCapacity").value;
+
+            let desc =
+                document.getElementById("hallDesc").value;
+
+            let status =
+                document.getElementById("hallStatus").value;
+
+            halls.push({
+                name,
+                capacity: cap,
+                desc,
+                status
+            });
+
+            localStorage.setItem(
+                "halls",
+                JSON.stringify(halls)
+            );
+
+            loadHalls();
+        }
+
+        function deleteHall(i){
+
+            halls.splice(i, 1);
+
+            localStorage.setItem(
+                "halls",
+                JSON.stringify(halls)
+            );
+
+            loadHalls();
+        }
+
+        function changeStatus(i, val){
+
+            halls[i].status = val;
+
+            localStorage.setItem(
+                "halls",
+                JSON.stringify(halls)
+            );
+
+            loadHalls();
+        }
+
+        function loadHalls(){
+
+            let table =
+                document.getElementById("hallTable");
+
+            table.innerHTML = "";
+
+            halls.forEach((h, i) => {
+
+                table.innerHTML += `
+                    <tr>
+                        <td>${h.name}</td>
+                        <td>${h.capacity}</td>
+                        <td>${h.desc}</td>
+                        <td>
+                            <select onchange="changeStatus(${i}, this.value)">
+                                <option ${h.status === "Available" ? "selected" : ""}>
+                                    Available
+                                </option>
+                                <option ${h.status === "Not Available" ? "selected" : ""}>
+                                    Not Available
+                                </option>
+                            </select>
+                        </td>
+                        <td>
+                            <button onclick="deleteHall(${i})">
+                                Delete
+                            </button>
+                        </td>
+                    </tr>
+                `;
+
+            });
+
+            document.getElementById("hallCount").innerText =
+                halls.length;
+        }
+
+        /* ================= BOOKINGS ================= */
+
+        function loadBookings(){
+
+            let bookings =
+                JSON.parse(localStorage.getItem("bookings")) || [];
+
+            let div = document.getElementById("bookingList");
+            div.innerHTML = "";
+
+            bookings.forEach((b, i) => {
+
+                div.innerHTML += `
+                    <p>
+                        <b>${b.hall}</b><br>
+                        ${b.date} - ${b.time}<br>
+                        ${b.type}<br>
+                        👤 ${b.userEmail}<br>
+                        Status: <b>${b.status}</b><br>
+
+                        <button onclick="approveBooking(${i})">
+                            Approve
+                        </button>
+                    </p>
+                    <hr>
+                `;
+            });
+
+            document.getElementById("bookingCount").innerText =
+                bookings.length;
+        }
+
+        function approveBooking(index){
+
+            let bookings =
+                JSON.parse(localStorage.getItem("bookings")) || [];
+
+            bookings[index].status = "Accepted";
+
+            localStorage.setItem("bookings", JSON.stringify(bookings));
+
+            loadBookings();
+        }
+
+        /* ================= REPORTS ================= */
+
+        function loadReports(){
+
+            let reports =
+                JSON.parse(localStorage.getItem("updates")) || [];
+
+            let container =
+                document.getElementById("reportList");
+
+            if(reports.length === 0){
+
+                container.innerHTML = "No reports available";
+
+            }else{
+
+                let html = `
+                    <table>
+                        <tr>
+                            <th>Name</th>
+                            <th>Subject</th>
+                            <th>Teacher</th>
+                            <th>Progress</th>
+                            <th>Date</th>
+                            <th>Action</th>
+                        </tr>
+                `;
+
+                reports.forEach((r, i) => {
+
+                    html += `
+                        <tr>
+                            <td>
+                                <span class="student-name">
+                                    👦 ${r.studentName}
+                                </span>
+                            </td>
+
+                            <td>
+                                <span class="subject-badge">
+                                    📚 ${r.subject}
+                                </span>
+                            </td>
+
+                            <td>
+                                👩‍🏫 ${r.teacherName || r.teacherEmail}
+                            </td>
+
+                            <td>
+                                <div class="progress-box">
+                                    ${r.comment}
+                                </div>
+                            </td>
+
+                            <td>
+                                ${r.date}
+                            </td>
+
+                            <td>
+                                <button
+                                    class="delete-btn"
+                                    onclick="deleteReport(${i})">
+                                    🗑 Delete
+                                </button>
+                            </td>
+                        </tr>
+                    `;
+                });
+
+                html += `</table>`;
+
+                container.innerHTML = html;
+            }
+
+            document.getElementById("reportCount").innerText =
+                reports.length;
+        }
+
+        function deleteReport(i){
+
+            let reports =
+                JSON.parse(localStorage.getItem("updates")) || [];
+
+            reports.splice(i, 1);
+
+            localStorage.setItem("updates", JSON.stringify(reports));
+
+            loadReports();
+        }
+
+        let adminMonth = new Date().getMonth();
+        let adminYear = new Date().getFullYear();
+
+        function loadAdminCalendar(){
+
+            let availability =
+                JSON.parse(localStorage.getItem("availability")) || [];
+
+            let div =
+                document.getElementById("adminCalendar");
+
+            let monthNames = [
+                "January","February","March",
+                "April","May","June",
+                "July","August","September",
+                "October","November","December"
+            ];
+
+            let firstDay =
+                new Date(adminYear, adminMonth, 1).getDay();
+
+            let daysInMonth =
+                new Date(adminYear, adminMonth + 1, 0).getDate();
+
+            let html = `
+                <div class="calendar">
+
+                    <div class="calendar-top">
+
+                        <button onclick="prevAdminMonth()">
+                            ◀
+                        </button>
+
+                        <div class="calendar-title">
+                            ${monthNames[adminMonth]} ${adminYear}
+                        </div>
+
+                        <button onclick="nextAdminMonth()">
+                            ▶
+                        </button>
+
+                    </div>
+
+                    <div class="calendar-grid">
+
+                        <div class="day-name">S</div>
+                        <div class="day-name">M</div>
+                        <div class="day-name">T</div>
+                        <div class="day-name">W</div>
+                        <div class="day-name">T</div>
+                        <div class="day-name">F</div>
+                        <div class="day-name">S</div>
+            `;
+
+            for(let i=0;i<firstDay;i++){
+                html += `<div class="empty"></div>`;
+            }
+
+            for(let day=1; day<=daysInMonth; day++){
+
+                let dateString =
+                    `${adminYear}-${String(adminMonth+1).padStart(2,'0')}-${String(day).padStart(2,'0')}`;
+
+                let slots =
+                    availability.filter(a => a.date === dateString);
+
+                html += `
+                    <div class="day ${slots.length ? 'available' : ''}">
+                        <strong>${day}</strong>
+                `;
+
+                slots.forEach(slot => {
+
+                    html += `
+                        <div class="teacher-slot">
+                            👩‍🏫 ${slot.teacherName}
+                            <br>
+                            ⏰ ${slot.time}
+                        </div>
+                    `;
+                });
+
+                html += `</div>`;
+            }
+
+            html += `
+                    </div>
+                </div>
+            `;
+
+            div.innerHTML = html;
+        }
+
+        function prevAdminMonth(){
+
+            adminMonth--;
+
+            if(adminMonth < 0){
+                adminMonth = 11;
+                adminYear--;
+            }
+
+            loadAdminCalendar();
+        }
+
+        function nextAdminMonth(){
+
+            adminMonth++;
+
+            if(adminMonth > 11){
+                adminMonth = 0;
+                adminYear++;
+            }
+
+            loadAdminCalendar();
+        }
+
+        let users = JSON.parse(localStorage.getItem("users")) || [];
+
+        function loadTeachers(){
+
+            let table = document.getElementById("teacherTable");
+            table.innerHTML = "";
+
+            let teachers = users.filter(u => u.role === "teacher");
+
+            teachers.forEach((t, i) => {
+
+                table.innerHTML += `
+                    <tr>
+                        <td>${t.fullname}</td>
+                        <td>${t.email}</td>
+                        <td>
+                            <button onclick="deleteTeacher('${t.email}')">
+                                Delete
+                            </button>
+                        </td>
+                    </tr>
+                `;
+            });
+        }
+
+        function loadAvailableTeachers(){
+
+            let availability =
+                JSON.parse(localStorage.getItem("availability")) || [];
+
+            let timetables =
+                JSON.parse(localStorage.getItem("timetables")) || [];
+
+            let date =
+                document.getElementById("ttDate").value;
+
+            let startTime =
+                document.getElementById("ttStartTime").value;
+
+            let mainSelect =
+                document.getElementById("ttTeacher");
+
+            let backupSelect =
+                document.getElementById("ttBackupTeacher");
+
+            mainSelect.innerHTML =
+                '<option value="">Select Main Teacher</option>';
+
+            backupSelect.innerHTML =
+                '<option value="">Select Backup Teacher</option>';
+
+            if(!date) return;
+
+            // Get all teachers available on selected date
+            let availableTeachers = availability.filter(a =>
+                a.date === date && a.time === startTime
+            );
+
+            let teacherNames =
+                [...new Set(
+                    availableTeachers.map(a => a.teacherName)
+                )];
+
+            teacherNames.forEach(name => {
+
+                // If admin selected a time, check clash
+                let teacherBusy = false;
+
+                if(startTime){
+
+                    teacherBusy = timetables.some(t =>
+                        t.teacher === name &&
+                        t.date === date &&
+                        t.startTime === startTime
+                    );
+                }
+
+                if(!teacherBusy){
+
+                    mainSelect.innerHTML += `
+                        <option value="${name}">
+                            ${name}
+                        </option>
+                    `;
+
+                    backupSelect.innerHTML += `
+                        <option value="${name}">
+                            ${name}
+                        </option>
+                    `;
+                }
+            });
+        }
+
+        document.getElementById("ttDate")
+            .addEventListener("change", loadAvailableTeachers);
+
+        document.getElementById("ttStartTime")
+            .addEventListener("change", loadAvailableTeachers);
+
+        mainSelect.innerHTML = '<option value="">Select Main Teacher</option>';
+
+        let backupSelect =
+            document.getElementById("ttBackupTeacher");
+
+        backupSelect.innerHTML = '<option value="">Select Backup Teacher</option>';
+
+        backupSelect.innerHTML =
+            '<option value="">Select Backup Teacher</option>';
+
+        function deleteTeacher(email){
+
+            let confirmDelete = confirm("Delete this teacher account?");
+            if(!confirmDelete) return;
+
+            users = users.filter(u => u.email !== email);
+
+            localStorage.setItem("users", JSON.stringify(users));
+
+            channel.postMessage({
+                type: "users-update",
+                data: users
+            });
+
+            loadTeachers();
+
+            alert("Teacher deleted successfully");
+        }
+
+        channel.onmessage = (event) => {
+
+            if(event.data.type === "students-update"){
+                localStorage.setItem("students", JSON.stringify(event.data.data));
+                loadStudents(); // refresh UI
+            }
+
+            if (event.data.type === "availability-update") {
+                localStorage.setItem("availability", JSON.stringify(event.data.data));
+                loadAdminCalendar(); // your admin UI function
+            }
+
+            if(event.data.type === "halls-update"){
+                localStorage.setItem("halls", JSON.stringify(event.data.data));
+                loadHalls();
+            }
+
+            if(event.data.type === "reports-update"){
+                localStorage.setItem("updates", JSON.stringify(event.data.data));
+                loadReports();
+            }
+
+            if(event.data.type === "bookings-update"){
+                localStorage.setItem("bookings", JSON.stringify(event.data.data));
+                loadBookings();
+            }
+
+            if(event.data.type === "users-update"){
+                localStorage.setItem("users", JSON.stringify(event.data.data));
+                users = event.data.data;
+                loadTeachers();
+            }
+
+            if(event.data.type === "timetable-update"){
+
+                localStorage.setItem(
+                    "timetables",
+                    JSON.stringify(event.data.data)
+                );
+
+                loadTimetables();
+            }
+        };
+
+        console.log(JSON.parse(localStorage.getItem("availability")));
+        /* ================= INIT ================= */
+        loadTimetables();
+        loadStudents();
+        loadHalls();
+        loadBookings();
+        loadReports();
+        loadAdminCalendar();
+        loadTeachers();
+
+        function toggleSidebar(){
+            document.querySelector(".sidebar")
+                .classList.toggle("closed");
+        }
+
+        document.querySelectorAll(".nav-item").forEach(item=>{
+            item.addEventListener("click",()=>{
+                if(window.innerWidth <= 768){
+                    document.querySelector(".sidebar")
+                        .classList.add("closed");
+                }
+            });
+        });
+
+        const scrollBtn =
+            document.getElementById("scrollTopBtn");
+
+        window.addEventListener("scroll", () => {
+
+            if(window.scrollY > 300){
+                scrollBtn.style.display = "block";
+            }else{
+                scrollBtn.style.display = "none";
+            }
+
+        });
+
+        function scrollToTop(){
+
+            window.scrollTo({
+                top: 0,
+                behavior: "smooth"
+            });
+
+        }
+
+        function uploadWeekGallery(){
+
+            let year =
+                document.getElementById("galleryYear").value;
+
+            let month =
+                document.getElementById("galleryMonth").value;
+
+            let week =
+                document.getElementById("galleryWeek").value;
+
+            let files =
+                document.getElementById("galleryFiles").files;
+
+            if(!year || !month || !week || files.length === 0){
+                alert("Please complete all fields");
+                return;
+            }
+
+            let galleries =
+                JSON.parse(localStorage.getItem("weeklyGallery"))
+                || [];
+
+            let images = [];
+            let loaded = 0;
+
+            for(let file of files){
+
+                let reader = new FileReader();
+
+                reader.onload = function(e){
+
+                    images.push(e.target.result);
+
+                    loaded++;
+
+                    if(loaded === files.length){
+
+                        let existingGallery =
+                            galleries.find(g =>
+                                g.year == year &&
+                                g.month == month &&
+                                g.week == week
+                            );
+
+                        if(existingGallery){
+
+                            existingGallery.images.push(...images);
+
+                        }else{
+
+                            galleries.push({
+                                id: Date.now(),
+                                year,
+                                month,
+                                week,
+                                images
+                            });
+
+                        }
+
+                        localStorage.setItem(
+                            "weeklyGallery",
+                            JSON.stringify(galleries)
+                        );
+
+                        document.getElementById(
+                            "galleryFiles"
+                        ).value = "";
+
+                        loadGalleryAdmin();
+
+                        alert(
+                            images.length +
+                            " photos uploaded successfully"
+                        );
+                    }
+                };
+
+                reader.readAsDataURL(file);
+            }
+        }
+
+        function loadGalleryAdmin(){
+
+            let galleries =
+                JSON.parse(
+                    localStorage.getItem("weeklyGallery")
+                ) || [];
+
+            let div =
+                document.getElementById("galleryAdminList");
+
+            div.innerHTML = "";
+
+            galleries.forEach(g=>{
+
+                div.innerHTML += `
+
+                <div class="card">
+
+                    <h3>
+                        ${g.year}
+                        - Month ${g.month}
+                        - Week ${g.week}
+                    </h3>
+
+                    <p>
+                        ${g.images.length} Photos
+                    </p>
+
+                    <button
+                        onclick="deleteWeekGallery(${g.id})">
+                        Delete Entire Week
+                    </button>
+
+                </div>
+
+                `;
+            });
+        }
+
+        function deleteWeekGallery(id){
+
+            let galleries =
+                JSON.parse(
+                    localStorage.getItem("weeklyGallery")
+                ) || [];
+
+            galleries =
+                galleries.filter(g => g.id !== id);
+
+            localStorage.setItem(
+                "weeklyGallery",
+                JSON.stringify(galleries)
+            );
+
+            loadGalleryAdmin();
+        }
+
+    </script>
+<button id="scrollTopBtn" onclick="scrollToTop()">
+    ⬆
+</button>
+</body>
+
+</html>

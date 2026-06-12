@@ -1,0 +1,435 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+<title>PTCB Home</title>
+
+<style>
+
+*{
+    margin:0;
+    padding:0;
+    box-sizing:border-box;
+    font-family:'Segoe UI',sans-serif;
+}
+
+:root{
+    --primary:#175E32;
+    --secondary:#447F56;
+    --light:#88BF61;
+    --dark:#7BA48A;
+    --white:#B0D0A6;
+}
+
+body{
+    background:#88BF61;
+}
+
+/* NAVBAR */
+
+header{
+    width:100%;
+    padding:20px 8%;
+    background:white;
+    position:sticky;
+    top:0;
+    z-index:100;
+    box-shadow:0 2px 15px rgba(0,0,0,.05);
+}
+
+nav{
+    display:flex;
+    justify-content:space-between;
+    align-items:center;
+}
+
+.logo{
+    font-size:28px;
+    font-weight:800;
+    color:var(--dark);
+}
+
+.logo span{
+    color:var(--secondary);
+}
+
+.nav-links{
+    display:flex;
+    align-items:center;
+    gap:35px;
+}
+
+.nav-links a{
+    text-decoration:none;
+    color:#333;
+    font-weight:500;
+}
+
+.nav-buttons{
+    display:flex;
+    gap:15px;
+}
+
+.login-btn{
+    padding:12px 25px;
+    border:2px solid var(--secondary);
+    border-radius:10px;
+    text-decoration:none;
+    color:var(--primary);
+    font-weight:600;
+    transition:.3s;
+}
+
+.login-btn:hover{
+    background:var(--secondary);
+    color:white;
+}
+
+.signup-btn{
+    padding:12px 25px;
+    border-radius:10px;
+    background:var(--secondary);
+    color:white;
+    text-decoration:none;
+    font-weight:600;
+    transition:.3s;
+}
+
+.signup-btn:hover{
+    transform:translateY(-3px);
+}
+
+/* HERO */
+
+.hero{
+    min-height:85vh;
+    background:var(--light);
+    display:flex;
+    align-items:center;
+    justify-content:center;
+    padding:60px 8%;
+}
+
+.hero-container{
+    display:flex;
+    align-items:center;
+    justify-content:space-between;
+    gap:50px;
+    width:100%;
+    max-width:1300px;
+}
+
+.hero-text{
+    flex:1;
+}
+
+.hero-text h1{
+    font-size:65px;
+    line-height:1.1;
+    margin-bottom:25px;
+    color:#111;
+}
+
+.hero-text p{
+    font-size:18px;
+    color:#555;
+    margin-bottom:35px;
+    max-width:550px;
+}
+
+.hero-btn{
+    display:inline-block;
+    padding:18px 40px;
+    background:var(--secondary);
+    color:white;
+    text-decoration:none;
+    border-radius:15px;
+    font-size:18px;
+    font-weight:600;
+    transition:.3s;
+}
+
+.hero-btn:hover{
+    transform:translateY(-5px);
+}
+
+.hero-image{
+    flex:1;
+    position:relative;
+    display:flex;
+    justify-content:center;
+}
+
+.hero-image img{
+    width:100%;
+    max-width:550px;
+    animation:float 4s ease-in-out infinite;
+}
+
+@keyframes float{
+    0%,100%{
+        transform:translateY(0);
+    }
+    50%{
+        transform:translateY(-15px);
+    }
+}
+
+/* COMPANIES */
+
+.companies{
+    background:white;
+    padding:40px;
+}
+
+.company-list{
+    display:flex;
+    justify-content:center;
+    gap:80px;
+    flex-wrap:wrap;
+}
+
+.company{
+    font-size:32px;
+    color:#666;
+    font-weight:700;
+}
+
+.comp{
+    font-size:16px;
+    color:#666;
+    font-weight:700;
+}
+
+/* FEATURES */
+
+.features{
+    padding:80px 8%;
+    text-align:center;
+}
+
+.features h2{
+    font-size:45px;
+    margin-bottom:20px;
+}
+
+.features p{
+    color:#666;
+    margin-bottom:50px;
+}
+
+.feature-grid{
+    display:grid;
+    grid-template-columns:repeat(auto-fit,minmax(280px,1fr));
+    gap:25px;
+}
+
+.feature-card{
+    background:white;
+    padding:30px;
+    border-radius:20px;
+    box-shadow:0 10px 30px rgba(0,0,0,.08);
+    transition:.3s;
+    cursor:pointer;
+
+    text-align: center; 
+
+    display: flex;
+    flex-direction: column;
+    justify-content: center; 
+    align-items: center;  
+}
+
+.feature-card:hover{
+    transform:translateY(-8px);
+    box-shadow:0 15px 35px rgba(0,0,0,.12);
+}
+
+.feature-card p{
+    color: #666;
+    font-size: 16px;
+    margin-top: 0;         
+    margin-bottom: 0; 
+}
+
+.feature-card h3{
+    color: var(--primary);
+    margin-top: 0;        
+    margin-bottom: 10px; 
+}
+
+@media(max-width:900px){
+
+    .hero-container{
+        flex-direction:column;
+        text-align:center;
+    }
+
+    .hero-text h1{
+        font-size:45px;
+    }
+
+    .nav-links{
+        display:none;
+    }
+
+}
+
+.social-card{
+    text-decoration:none;
+    color:inherit;
+    display:block;
+    cursor:pointer;
+}
+
+.social-card:hover{
+    transform:translateY(-8px);
+    box-shadow:0 15px 35px rgba(0,0,0,.12);
+}
+
+.logo{
+    display:flex;
+    align-items:center;
+    gap:10px;
+    font-size:28px;
+    font-weight:800;
+    color:var(--dark);
+}
+
+.logo img{
+    width:50px;
+    height:50px;
+    object-fit:contain;
+}
+
+html{
+    scroll-behavior:smooth;
+}
+
+</style>
+</head>
+
+<body>
+
+<header>
+    <nav>
+
+        <div class="logo">
+            <img src="C:\Users\User\Downloads\PTCB web\PTCB Logo.jpg" alt="PTCB Logo">
+            P<span>T</span>C<span>B</span>
+        </div>
+
+        <div class="nav-links">
+            <a href="C:\Users\User\Downloads\PTCB web\services.html">Services</a>
+            <a href="C:\Users\User\Downloads\PTCB web\home.html">About Us</a>
+            <a href="#contact">Contact Us</a>
+            <a href="gallery.html">Weekly Gallery</a>            
+        </div>
+
+        <div class="nav-buttons">
+
+            <!-- CONNECTED TO LOGIN PAGE -->
+            <a href="index.html" class="login-btn">
+                Login
+            </a>
+
+            <!-- CONNECTED TO SIGNUP PAGE -->
+            <a href="signup.html" class="signup-btn">
+                Register
+            </a>
+
+        </div>
+
+    </nav>
+</header>
+
+<section class="hero">
+
+    <div class="hero-container">
+
+        <div class="hero-text">
+
+            <img src="C:\Users\User\Downloads\PTCB web\PTCB Logo.jpg"
+                class="hero-logo"
+                alt="PTCB Logo">
+
+            <h1>Knowledge, Character, Success</h1>
+
+            <p>Empowering education and community</p>
+
+        </div>
+
+        <div class="hero-image">
+
+            <img src="C:\Users\User\Downloads\PTCB web\PTCB Building.jpeg">
+
+        </div>
+
+    </div>
+
+</section>
+
+<section class="companies">
+
+    <div class="company-list">
+        <div class="company">Tutor class <div class="comp">(Primary P1-P6)</div></div>
+        <div class="company">Tutor class<div class="comp">(Secondary F1- SPM)</div></div>  
+        <div class="company">Personal class</div>
+        <div class="company">Grouping class</div>
+        <div class="company">English & softskills</div>
+    </div>
+
+</section>
+
+<section class="features" id="contact">
+
+    <h2>Contact & Follow Us</h2>
+
+    <p>
+        Stay connected with PTCB through our social media channels and contact information.
+    </p>
+
+    <div class="feature-grid">
+
+        <div onclick="window.open('https://instagram.com/officialptcbkuantan', '_blank', 'noopener,noreferrer')" class="feature-card social-card">
+            <h3>📷 Instagram</h3>
+            <p>@officialptcbkuantan</p>
+        </div>
+
+        <div onclick="window.open('https://www.tiktok.com/officialptcbkuantan', '_blank', 'noopener,noreferrer')" class="feature-card social-card">
+            <h3>🎵 TikTok</h3>
+            <p>@ptcb_official</p>
+        </div>
+
+        <div onclick="window.open('https://www.facebook.com/pusattuisyen.cendekiawanbestari/', '_blank', 'noopener,noreferrer')" class="feature-card social-card">
+            <h3>📘 Facebook</h3>
+            <p>PTCB Tuition Centre</p>
+        </div>
+
+        <div onclick="window.open('mailto:info@ptcb.com', '_blank', 'noopener,noreferrer')" class="feature-card social-card">
+            <h3>✉️ Email</h3>
+            <p>info@ptcb.com</p>
+        </div>
+
+        <div onclick="window.open('https://wa.me/601169112711?text=Hello%20PTCB,%20I%20would%20like%20to%20', '_blank', 'noopener,noreferrer')" class="feature-card social-card">
+            <h3>📞 Contact Number</h3>
+            <p>+60 12-345 6789</p>
+        </div>
+
+        <div onclick="window.open('https://www.google.com/maps/dir//Pusat+Tuisyen+Cendekiawan+Bestari,+Sinaran+Mahkota,+B28-GF,+Jalan+IM+7%2F5,+Bandar+Indera+Mahkota,+25200+Kuantan,+Pahang/@3.356943,101.8321567,12z/data=!4m8!4m7!1m0!1m5!1m1!1s0x31c8bbb7b7b6819f:0xac4b7d607fcfb168!2m2!1d103.3002135!2d3.8350808?entry=ttu&g_ep=EgoyMDI2MDYwMS4wIKXMDSoASAFQAw%3D%3D', '_blank', 'noopener,noreferrer')" class="feature-card social-card">
+            <h3>📍 Address</h3>
+            <p>
+                Sinaran Mahkota, B28-GF, Jalan IM 7/5<br> 
+                Bandar Indera Mahkota, 25200<br> 
+                Kuantan, Pahang
+            </p>
+        </div>
+
+    </div>
+
+</section>
+
+</body>
+</html>

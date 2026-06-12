@@ -1,0 +1,369 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <title>PTCB Login</title>
+
+    <style>
+
+        *{
+            margin:0;
+            padding:0;
+            box-sizing:border-box;
+            font-family:'Segoe UI',sans-serif;
+        }
+
+        :root{
+            --primary:#2E7D32;
+            --secondary:#4CAF50;
+            --light:#E8F5E9;
+            --dark:#1B5E20;
+        }
+
+        body{
+            min-height:100vh;
+            display:flex;
+            justify-content:center;
+            align-items:center;
+            padding:20px;
+            overflow:hidden;
+
+            background:
+                linear-gradient(
+                    135deg,
+                    #1B5E20 0%,
+                    #2E7D32 35%,
+                    #4CAF50 100%
+                );
+        }
+
+        .login-card,
+        .signup-card{
+            position:relative;
+            z-index:10;
+
+            width:100%;
+            max-width:450px;
+
+            padding:40px;
+
+            border-radius:30px;
+
+            background:rgba(255,255,255,.15);
+
+            backdrop-filter:blur(15px);
+
+            border:1px solid rgba(255,255,255,.25);
+
+            box-shadow:
+                0 15px 40px rgba(0,0,0,.25);
+
+            color:white;
+        }
+
+        .logo{
+            font-size:60px;
+            margin-bottom:10px;
+        }
+
+        h1{
+            color:white;
+            font-size:34px;
+            font-weight:700;
+            margin-bottom:8px;
+        }
+
+        .subtitle{
+            color:rgba(255,255,255,.85);
+            margin-bottom:30px;
+        }
+
+        .subtitle{
+            color:#666;
+            margin-bottom:25px;
+        }
+
+        input,
+        select{
+            width:100%;
+            padding:14px 16px;
+
+            margin-bottom:16px;
+
+            border:none;
+            border-radius:12px;
+
+            background:rgba(255,255,255,.9);
+
+            font-size:15px;
+
+            transition:.3s;
+        }
+
+        input:focus,
+        select:focus{
+            outline:none;
+
+            transform:translateY(-2px);
+
+            box-shadow:
+                0 0 0 3px rgba(255,255,255,.3);
+        }
+
+        button{
+            width:100%;
+            padding:15px;
+
+            border:none;
+            border-radius:12px;
+
+            background:white;
+            color:#2E7D32;
+
+            font-size:16px;
+            font-weight:700;
+
+            cursor:pointer;
+
+            transition:.3s;
+        }
+
+        button:hover{
+            transform:translateY(-3px);
+
+            box-shadow:
+                0 10px 25px rgba(0,0,0,.2);
+        }
+
+        .signup-link,
+        .login-link{
+            margin-top:20px;
+            color:white;
+        }
+
+        .signup-link a,
+        .login-link a{
+            color:#ffffff;
+            font-weight:700;
+            text-decoration:none;
+            border-bottom:2px solid transparent;
+            transition:.3s;
+        }
+
+        .signup-link a:hover,
+        .login-link a:hover{
+            border-bottom:2px solid white;
+        }
+
+        .footer{
+            margin-top:25px;
+            color:rgba(255,255,255,.8);
+            font-size:13px;
+        }
+
+        .bg-circle{
+            position:absolute;
+            border-radius:50%;
+            background:rgba(255,255,255,.1);
+            backdrop-filter:blur(10px);
+        }
+
+        .circle1{
+            width:300px;
+            height:300px;
+            top:-100px;
+            left:-100px;
+        }
+
+        .circle2{
+            width:250px;
+            height:250px;
+            bottom:-80px;
+            right:-80px;
+        }
+
+        .circle3{
+            width:150px;
+            height:150px;
+            top:20%;
+            right:15%;
+        }
+
+        .logo-container{
+            display:flex;
+            justify-content:center;
+            margin-bottom:20px;
+        }
+
+        .logo{
+            width:90px;
+            height:90px;
+
+            display:flex;
+            align-items:center;
+            justify-content:center;
+
+            font-size:42px;
+
+            border-radius:50%;
+
+            background:white;
+            color:#2E7D32;
+
+            box-shadow:
+                0 10px 25px rgba(0,0,0,.15);
+        }
+
+        @keyframes fadeUp{
+            from{
+                opacity:0;
+                transform:translateY(40px);
+            }
+            to{
+                opacity:1;
+                transform:translateY(0);
+            }
+        }
+
+        .login-card,
+        .signup-card{
+            animation:fadeUp .8s ease;
+        }
+
+    </style>
+</head>
+
+<body>
+
+    <div class="bg-circle circle1"></div>
+    <div class="bg-circle circle2"></div>
+    <div class="bg-circle circle3"></div>
+
+    <div class="login-card">
+
+        <div class="logo-container">
+            <div class="logo">📚</div>
+        </div>
+
+        <h1>PTCB</h1>
+
+        <p class="subtitle">Tutoring Management System</p>
+
+        <input type="email" id="email" placeholder="Email">
+        <input type="password" id="password" placeholder="Password">
+
+        <select id="role">
+            <option value="">Select Role</option>
+            <option value="admin">Admin</option>
+            <option value="teacher">Teacher</option>
+            <option value="parent">Parent</option>
+            <option value="customer">Customer</option>
+        </select>
+
+        <button onclick="login()">Login</button>
+
+        <div class="signup-link">
+            Don't have an account?
+            <a href="signup.html">Sign Up</a>
+        </div>
+
+        <div class="footer">
+            Empowering Learning & Progress Tracking
+        </div>
+
+    </div>
+
+    <script>
+
+        function login(){
+
+            let email =
+                document.getElementById("email").value.trim();
+
+            let password =
+                document.getElementById("password").value;
+
+            let role =
+                document.getElementById("role").value;
+
+            if(
+                email === "" ||
+                password === "" ||
+                role === ""
+            ){
+                alert("Please fill all fields");
+                return;
+            }
+            
+            let users =
+                JSON.parse(localStorage.getItem("users")) || [];
+
+            if(!users.some(u => u.email === "admin1@gmail.com")){
+                users.push({
+                    fullname: "Administrator 1",
+                    email: "admin1@gmail.com",
+                    password: "admin1",
+                    role: "admin"
+                });
+            }
+
+            if(!users.some(u => u.email === "admin2@gmail.com")){
+                users.push({
+                    fullname: "Administrator 2",
+                    email: "admin2@gmail.com",
+                    password: "admin2",
+                    role: "admin"
+                });
+            }
+
+            localStorage.setItem(
+                "users",
+                JSON.stringify(users)
+            );
+
+            let user =
+                users.find(u =>
+                    u.email === email &&
+                    u.password === password &&
+                    u.role === role
+                );
+
+            if(!user){
+                alert("Invalid email, password, or role");
+                return;
+            }
+
+            // save session
+            localStorage.setItem("userName", user.fullname);
+            localStorage.setItem("userEmail", user.email);            
+            localStorage.setItem("role", user.role);
+
+            alert("Login successful!");
+
+            // redirect by role
+            if(role === "admin"){
+                window.location = "admin.html";
+            }
+
+            if(role === "teacher"){
+                window.location = "teacher.html";
+            }
+
+            if(role === "parent"){
+                window.location = "parent.html";
+            }
+
+            if(role === "customer"){
+                window.location = "customer.html";
+            }
+
+        }
+
+    </script>
+
+</body>
+
+</html>

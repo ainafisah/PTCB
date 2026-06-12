@@ -1,0 +1,391 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>PTCB Sign Up</title>
+
+    <style>
+
+        *{
+            margin:0;
+            padding:0;
+            box-sizing:border-box;
+            font-family:'Segoe UI',sans-serif;
+        }
+
+        :root{
+            --primary:#2E7D32;
+            --secondary:#4CAF50;
+            --light:#E8F5E9;
+            --dark:#1B5E20;
+            --white:#ffffff;
+        }
+
+        body{
+            min-height:100vh;
+            display:flex;
+            justify-content:center;
+            align-items:center;
+            overflow:hidden;
+
+            background:
+            linear-gradient(
+                135deg,
+                #021b0f,
+                #0b3d22,
+                #1b5e20,
+                #4CAF50
+            );
+
+            background-size:400% 400%;
+
+            animation:aurora 15s ease infinite;
+        }
+
+        @keyframes aurora{
+            0%{background-position:0% 50%;}
+            50%{background-position:100% 50%;}
+            100%{background-position:0% 50%;}
+        }
+
+        .signup-card{
+            position:relative;
+
+            background:rgba(255,255,255,.08);
+
+            backdrop-filter:blur(20px);
+
+            border:1px solid rgba(255,255,255,.2);
+
+            width:100%;
+            max-width:480px;
+
+            padding:40px;
+
+            border-radius:30px;
+
+            box-shadow:
+            0 20px 50px rgba(0,0,0,.4);
+
+            color:white;
+
+            animation:slideUp .8s ease;
+        }
+
+        .signup-card::before{
+            content:"";
+
+            position:absolute;
+            inset:-2px;
+
+            border-radius:30px;
+
+            background:linear-gradient(
+                45deg,
+                #00ff88,
+                #7CFFB2,
+                #00ff88
+            );
+
+            z-index:-1;
+
+            animation:borderMove 5s linear infinite;
+        }
+
+        @keyframes borderMove{
+            0%{filter:hue-rotate(0deg);}
+            100%{filter:hue-rotate(360deg);}
+        }
+
+        @keyframes slideUp{
+            from{
+                opacity:0;
+                transform:translateY(40px);
+            }
+            to{
+                opacity:1;
+                transform:translateY(0);
+            }
+        }
+
+        .logo{
+            width:100px;
+            height:100px;
+
+            margin:auto;
+
+            display:flex;
+            align-items:center;
+            justify-content:center;
+
+            border-radius:50%;
+
+            background:linear-gradient(
+                135deg,
+                #00ff88,
+                #4CAF50
+            );
+
+            font-size:50px;
+
+            box-shadow:
+            0 0 30px #00ff88;
+
+            margin-bottom:20px;
+
+            animation:pulse 3s infinite;
+        }
+
+        @keyframes pulse{
+            0%,100%{
+                box-shadow:0 0 25px #00ff88;
+            }
+            50%{
+                box-shadow:0 0 60px #00ff88;
+            }
+        }
+
+        h1{
+            color:var(--primary);
+            margin-bottom:10px;
+        }
+
+        .subtitle{
+            color:#666;
+            margin-bottom:25px;
+        }
+
+        input,
+        select{
+            background:rgba(255,255,255,.08);
+
+            border:1px solid rgba(255,255,255,.2);
+
+            color:white;
+
+            padding:15px;
+
+            border-radius:15px;
+
+            transition:.3s;
+        }
+
+        input::placeholder{
+            color:rgba(255,255,255,.7);
+        }
+
+        input:focus,
+        select:focus{
+            border-color:#00ff88;
+
+            box-shadow:
+            0 0 20px rgba(0,255,136,.5);
+
+            transform:translateY(-2px);
+        }
+
+        button{
+            background:linear-gradient(
+                135deg,
+                #00ff88,
+                #4CAF50
+            );
+
+            border:none;
+
+            color:white;
+
+            padding:15px;
+
+            border-radius:15px;
+
+            font-weight:700;
+
+            transition:.4s;
+        }
+
+        button:hover{
+            transform:translateY(-4px);
+
+            box-shadow:
+            0 15px 30px rgba(0,255,136,.5);
+        }
+
+        .login-link{
+            margin-top:15px;
+            font-size:14px;
+        }
+
+        .login-link a{
+            color:var(--primary);
+            text-decoration:none;
+            font-weight:bold;
+        }
+
+        .footer{
+            margin-top:20px;
+            font-size:13px;
+            color:#777;
+        }
+
+        .blob{
+            position:absolute;
+            border-radius:50%;
+            filter:blur(80px);
+            opacity:.6;
+        }
+
+        .blob1{
+            width:300px;
+            height:300px;
+            background:#00ff88;
+            top:-50px;
+            left:-50px;
+            animation:float1 12s infinite alternate;
+        }
+
+        .blob2{
+            width:250px;
+            height:250px;
+            background:#7CFFB2;
+            bottom:-50px;
+            right:-50px;
+            animation:float2 10s infinite alternate;
+        }
+
+        .blob3{
+            width:180px;
+            height:180px;
+            background:#00E676;
+            top:50%;
+            left:50%;
+            animation:float3 15s infinite alternate;
+        }
+
+        @keyframes float1{
+            from{transform:translate(0,0);}
+            to{transform:translate(200px,150px);}
+        }
+
+        @keyframes float2{
+            from{transform:translate(0,0);}
+            to{transform:translate(-200px,-150px);}
+        }
+
+        @keyframes float3{
+            from{transform:translate(-50%,-50%);}
+            to{transform:translate(-30%,-70%);}
+        }
+
+    </style>
+</head>
+
+<body>
+    <div class="blob blob1"></div>
+    <div class="blob blob2"></div>
+    <div class="blob blob3"></div>
+    <div class="signup-card">
+        <h1 class="glow-title">PTCB</h1>
+        <div class="logo">📚</div>
+
+        <h1>PTCB</h1>
+        <p class="subtitle">Create Your Account</p>
+
+        <input type="text" id="fullname" placeholder="Full Name">
+        <input type="email" id="email" placeholder="Email Address">
+        <input type="password" id="password" placeholder="Password">
+        <input type="password" id="confirmPassword" placeholder="Confirm Password">
+
+        <select id="role">
+            <option value="">Select Role</option>
+            <option value="teacher">Teacher</option>
+            <option value="parent">Parent</option>
+            <option value="customer">Customer</option>
+        </select>
+
+        <button onclick="signup()">Sign Up</button>
+
+        <div class="login-link">
+            Already have an account?
+            <a href="index.html">Login</a>
+        </div>
+
+        <div class="footer">
+            Empowering Learning & Progress Tracking
+        </div>
+
+    </div>
+
+    <script>
+
+        function signup(){
+
+            let fullname =
+                document.getElementById("fullname").value.trim();
+
+            let email =
+                document.getElementById("email").value.trim();
+
+            let password =
+                document.getElementById("password").value;
+
+            let confirmPassword =
+                document.getElementById("confirmPassword").value;
+
+            let role =
+                document.getElementById("role").value;
+
+            if(
+                fullname === "" ||
+                email === "" ||
+                password === "" ||
+                confirmPassword === "" ||
+                role === ""
+            ){
+                alert("Please fill all fields");
+                return;
+            }
+
+            if(password !== confirmPassword){
+                alert("Passwords do not match");
+                return;
+            }
+
+            let users =
+                JSON.parse(localStorage.getItem("users")) || [];
+
+            let existingUser =
+                users.find(user => user.email === email);
+
+            if(existingUser){
+                alert("Email already registered");
+                return;
+            }
+
+            let newUser = {
+                fullname: fullname,
+                email: email,
+                password: password,
+                role: role,
+                createdAt: new Date().toISOString()
+            };
+
+            users.push(newUser);
+
+            localStorage.setItem(
+                "users",
+                JSON.stringify(users)
+            );
+
+            alert("Account created successfully!");
+
+            window.location = "index.html";
+        }
+
+    </script>
+
+</body>
+</html>
+
+

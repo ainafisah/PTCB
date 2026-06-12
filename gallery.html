@@ -1,0 +1,557 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="UTF-8">
+<title>PTCB Weekly Class Gallery</title>
+
+<style>
+
+body{
+    position:relative;
+    background:linear-gradient(135deg,#E8F5E9,#F4FFF5);
+    padding:30px;
+    font-family:'Segoe UI',sans-serif;
+}
+
+@media(max-width:768px){
+
+    .home-btn{
+        top:15px;
+        right:15px;
+        padding:10px 15px;
+        font-size:14px;
+    }
+
+}
+
+h1{
+    text-align:center;
+    color:#1B5E20;
+    margin-bottom:25px;
+    font-size:2.2rem;
+}
+
+.controls{
+    display:flex;
+    gap:12px;
+    justify-content:center;
+    flex-wrap:wrap;
+    margin-bottom:30px;
+    padding:20px;
+    background:rgba(255,255,255,.7);
+    backdrop-filter:blur(15px);
+    border-radius:20px;
+    box-shadow:0 10px 30px rgba(0,0,0,.08);
+}
+
+select,
+button{
+    padding:12px 18px;
+    border:none;
+    border-radius:12px;
+    font-size:15px;
+}
+
+select{
+    background:white;
+}
+
+.controls button{
+    background:#2E7D32;
+    color:white;
+    font-weight:600;
+}
+
+.gallery-container{
+    max-width:1200px;
+    margin:auto;
+}
+
+.slideshow{
+    position:relative;
+    width:100%;
+    overflow:hidden;
+    border-radius:25px;
+    box-shadow:0 15px 40px rgba(0,0,0,.15);
+}
+
+.slideshow img{
+    width:100%;
+    height:650px;
+    object-fit:cover;
+    display:block;
+    transition:opacity .6s ease;
+}
+
+.nav-btn{
+    position:absolute;
+    top:50%;
+    transform:translateY(-50%);
+    width:60px;
+    height:60px;
+    border:none;
+    border-radius:50%;
+    background:rgba(255,255,255,.85);
+    backdrop-filter:blur(10px);
+    font-size:26px;
+    cursor:pointer;
+    box-shadow:0 4px 15px rgba(0,0,0,.2);
+    transition:.3s;
+}
+
+.nav-btn:hover{
+    transform:translateY(-50%) scale(1.1);
+}
+
+.prev{
+    left:20px;
+}
+
+.next{
+    right:20px;
+}
+
+.image-info{
+    position:absolute;
+    bottom:20px;
+    left:20px;
+    right:20px;
+    display:flex;
+    justify-content:space-between;
+    align-items:center;
+    padding:15px 20px;
+    background:rgba(0,0,0,.45);
+    backdrop-filter:blur(10px);
+    color:white;
+    border-radius:15px;
+}
+
+#imageCounter{
+    font-weight:600;
+}
+
+.thumbnails{
+    display:flex;
+    gap:10px;
+    overflow-x:auto;
+    margin-top:15px;
+    padding:10px;
+}
+
+.thumbnails img{
+    width:100px;
+    height:70px;
+    object-fit:cover;
+    border-radius:10px;
+    cursor:pointer;
+    opacity:.6;
+    transition:.3s;
+}
+
+.thumbnails img:hover,
+.thumbnails img.active{
+    opacity:1;
+    transform:scale(1.05);
+    border:3px solid #2E7D32;
+}
+
+@media(max-width:768px){
+
+    .slideshow img{
+        height:300px;
+    }
+
+    .nav-btn{
+        width:45px;
+        height:45px;
+        font-size:20px;
+    }
+
+    .image-info{
+        flex-direction:column;
+        gap:5px;
+        text-align:center;
+    }
+
+    .thumbnails img{
+        width:80px;
+        height:60px;
+    }
+}
+
+.home-btn{
+    position:absolute;
+    top:30px;
+    right:30px;
+    background:#2E7D32;
+    color:white;
+    text-decoration:none;
+    padding:12px 20px;
+    border-radius:12px;
+    font-weight:600;
+    box-shadow:0 6px 15px rgba(0,0,0,.15);
+    transition:.3s;
+}
+
+.home-btn:hover{
+    background:#1B5E20;
+    transform:translateY(-2px);
+}
+
+</style>
+</head>
+
+<body>
+
+<h1>📸 Weekly Gallery</h1>
+
+<a href="home.html" class="home-btn">
+    🏠 Back Home
+</a>
+
+<div class="controls">
+
+    <select id="viewYear">
+        <option value="">Select Year</option>
+    </select>
+
+    <select id="viewMonth">
+        <option value="">Select Month</option>
+    </select>
+
+    <select id="viewWeek">
+        <option value="">Select Week</option>
+    </select>
+
+    <button onclick="loadGallery()">
+        View Gallery
+    </button>
+
+</div>
+
+<div class="gallery-container">
+
+    <div class="slideshow">
+
+        <button class="nav-btn prev" onclick="prevSlide()">
+            ❮
+        </button>
+
+        <img
+            id="slideImage"
+            src="https://via.placeholder.com/1200x650?text=Weekly+Gallery">
+
+        <button class="nav-btn next" onclick="nextSlide()">
+            ❯
+        </button>
+
+        <div class="image-info">
+
+            <div id="galleryTitle">
+                Weekly Gallery
+            </div>
+
+            <div id="imageCounter">
+                0 / 0
+            </div>
+
+        </div>
+
+    </div>
+
+    <div class="thumbnails" id="thumbnailContainer">
+    </div>
+
+</div>
+
+<script>
+
+let currentImages = [];
+let currentIndex = 0;
+
+window.onload = function(){
+
+    let galleries =
+        JSON.parse(
+            localStorage.getItem("weeklyGallery")
+        ) || [];
+
+    let years =
+        [...new Set(
+            galleries.map(g => g.year)
+        )];
+
+    let months =
+        [...new Set(
+            galleries.map(g => g.month)
+        )];
+
+    let weeks =
+        [...new Set(
+            galleries.map(g => g.week)
+        )];
+
+    let yearSelect =
+        document.getElementById("viewYear");
+
+    let monthSelect =
+        document.getElementById("viewMonth");
+
+    let weekSelect =
+        document.getElementById("viewWeek");
+
+    years.sort().forEach(year=>{
+
+        yearSelect.innerHTML += `
+            <option value="${year}">
+                ${year}
+            </option>
+        `;
+
+    });
+
+    months.sort((a,b)=>a-b).forEach(month=>{
+
+        monthSelect.innerHTML += `
+            <option value="${month}">
+                Month ${month}
+            </option>
+        `;
+
+    });
+
+    weeks.sort((a,b)=>a-b).forEach(week=>{
+
+        weekSelect.innerHTML += `
+            <option value="${week}">
+                Week ${week}
+            </option>
+        `;
+
+    });
+
+};
+
+function loadGallery(){
+
+    let year =
+        document.getElementById("viewYear").value;
+
+    let month =
+        document.getElementById("viewMonth").value;
+
+    let week =
+        document.getElementById("viewWeek").value;
+
+    if(!year || !month || !week){
+
+        alert(
+            "Please select Year, Month and Week"
+        );
+
+        return;
+    }
+
+    let galleries =
+        JSON.parse(
+            localStorage.getItem("weeklyGallery")
+        ) || [];
+
+    let matchingGalleries =
+        galleries.filter(g =>
+            g.year == year &&
+            g.month == month &&
+            g.week == week
+        );
+
+    if(matchingGalleries.length === 0){
+
+        alert("No gallery found");
+        return;
+    }
+
+    currentImages = [];
+
+    matchingGalleries.forEach(g=>{
+
+        currentImages.push(...g.images);
+
+    });
+
+    currentIndex = 0;
+
+    document.getElementById(
+        "galleryTitle"
+    ).innerText =
+    `Year ${year} • Month ${month} • Week ${week}`;
+
+    let img =
+        document.getElementById("slideImage");
+
+    img.style.opacity = 0;
+
+    setTimeout(()=>{
+
+        img.src = currentImages[0];
+
+        img.style.opacity = 1;
+
+    },250);
+
+    renderThumbnails();
+    updateCounter();
+}
+
+function updateCounter(){
+
+    if(currentImages.length === 0){
+
+        document.getElementById(
+            "imageCounter"
+        ).innerText = "0 / 0";
+
+        return;
+    }
+
+    document.getElementById(
+        "imageCounter"
+    ).innerText =
+    (currentIndex + 1) +
+    " / " +
+    currentImages.length;
+}
+
+function nextSlide(){
+
+    if(currentImages.length === 0)
+        return;
+
+    currentIndex++;
+
+    if(currentIndex >= currentImages.length){
+
+        currentIndex = 0;
+    }
+
+    let img =
+        document.getElementById(
+            "slideImage"
+        );
+
+    img.style.opacity = 0;
+
+    setTimeout(()=>{
+
+        img.src =
+            currentImages[currentIndex];
+
+        img.style.opacity = 1;
+
+    },250);
+
+    updateCounter();
+    renderThumbnails();
+}
+
+function prevSlide(){
+
+    if(currentImages.length === 0)
+        return;
+
+    currentIndex--;
+
+    if(currentIndex < 0){
+
+        currentIndex =
+            currentImages.length - 1;
+    }
+
+    let img =
+        document.getElementById(
+            "slideImage"
+        );
+
+    img.style.opacity = 0;
+
+    setTimeout(()=>{
+
+        img.src =
+            currentImages[currentIndex];
+
+        img.style.opacity = 1;
+
+    },250);
+
+    updateCounter();
+    renderThumbnails();
+}
+
+function renderThumbnails(){
+
+    let container =
+        document.getElementById(
+            "thumbnailContainer"
+        );
+
+    container.innerHTML = "";
+
+    currentImages.forEach(
+        (img,index)=>{
+
+        let thumb =
+            document.createElement("img");
+
+        thumb.src = img;
+
+        if(index === currentIndex){
+
+            thumb.classList.add(
+                "active"
+            );
+
+        }
+
+        thumb.onclick = ()=>{
+
+            currentIndex = index;
+
+            let slide =
+                document.getElementById(
+                    "slideImage"
+                );
+
+            slide.style.opacity = 0;
+
+            setTimeout(()=>{
+
+                slide.src = img;
+
+                slide.style.opacity = 1;
+
+            },250);
+
+            updateCounter();
+            renderThumbnails();
+        };
+
+        container.appendChild(
+            thumb
+        );
+
+    });
+}
+
+setInterval(()=>{
+
+    if(currentImages.length > 1){
+
+        nextSlide();
+
+    }
+
+},5000);
+
+</script>
+
+</body>
+</html>

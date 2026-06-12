@@ -1,0 +1,362 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Parent Dashboard</title>
+
+<style>
+*{
+    margin:0;
+    padding:0;
+    box-sizing:border-box;
+    font-family:'Segoe UI',sans-serif;
+}
+
+:root{
+    --primary:#2E7D32;
+    --secondary:#4CAF50;
+    --light:#E8F5E9;
+    --white:#ffffff;
+    --gray:#f5f7f5;
+}
+
+/* PAGE */
+body{
+    background:
+    linear-gradient(135deg,
+    #0F2027 0%,
+    #203A43 25%,
+    #2E7D32 60%,
+    #66BB6A 100%);
+    min-height:100vh;
+    padding:30px;
+}
+
+/* SIDEBAR */
+.sidebar{
+    width:250px;
+    background:linear-gradient(180deg,var(--primary),var(--secondary));
+    color:white;
+    min-height:100vh;
+    padding:20px;
+    position:sticky;
+    top:0;
+}
+
+.sidebar h2{
+    margin-bottom:20px;
+    font-size:20px;
+}
+
+.sidebar p{
+    font-size:14px;
+    opacity:0.9;
+    margin-bottom:20px;
+}
+
+.nav-item{
+    padding:10px;
+    margin-bottom:10px;
+    border-radius:8px;
+    cursor:pointer;
+    background:rgba(255,255,255,0.1);
+}
+
+.nav-item:hover{
+    background:rgba(255,255,255,0.25);
+}
+
+/* MAIN */
+.main{
+    flex:1;
+    padding:20px;
+}
+
+/* HEADER */
+.header{
+    background:linear-gradient(135deg,#2E7D32,#4CAF50);
+    color:white;
+    padding:25px;
+    border-radius:20px;
+    display:flex;
+    justify-content:space-between;
+    align-items:center;
+    margin-bottom:25px;
+    box-shadow:0 10px 30px rgba(0,0,0,.15);
+}
+
+.header h1{
+    color:white;
+    font-size:28px;
+    font-weight:700;
+}
+
+.logout{
+    background:white;
+    color:#2E7D32;
+    border:none;
+    padding:12px 18px;
+    border-radius:12px;
+    font-weight:600;
+    cursor:pointer;
+    transition:.3s;
+}
+
+.logout:hover{
+    transform:scale(1.05);
+}
+
+/* STATS */
+.stats{
+    display:grid;
+    grid-template-columns:repeat(auto-fit,minmax(200px,1fr));
+    gap:15px;
+    margin-bottom:20px;
+}
+
+.stat-card{
+    background:rgba(255,255,255,0.8);
+    backdrop-filter:blur(12px);
+    border-radius:20px;
+    padding:25px;
+    box-shadow:0 8px 25px rgba(0,0,0,.08);
+    transition:.3s;
+}
+
+.stat-card:hover{
+    transform:translateY(-8px);
+    box-shadow:0 15px 35px rgba(0,0,0,.15);
+}
+
+.stat-card h1{
+    font-size:36px;
+    margin-top:10px;
+}
+
+.stat-card h3{
+    color:#555;
+    font-size:14px;
+}
+
+/* CARDS */
+.card{
+    background:rgba(255,255,255,.85);
+    backdrop-filter:blur(15px);
+    border-radius:20px;
+    padding:25px;
+    margin-bottom:25px;
+    box-shadow:0 8px 25px rgba(0,0,0,.08);
+    transition:.3s;
+}
+
+.card:hover{
+    transform:translateY(-5px);
+}
+
+.card h2{
+    color:var(--primary);
+    margin-bottom:15px;
+}
+
+.card,
+.stat-card{
+    background:rgba(255,255,255,0.15);
+    backdrop-filter:blur(18px);
+    border:1px solid rgba(255,255,255,0.2);
+    color:#fff;
+}
+
+.card h2,
+.stat-card h3{
+    color:#E8F5E9;
+}
+
+/* STUDENT INFO */
+.student-info p{
+    line-height:1.8;
+}
+
+/* REPORTS */
+.progress-item{
+    background:white;
+    border:none;
+    border-radius:15px;
+    padding:18px;
+    margin-bottom:15px;
+    box-shadow:0 4px 15px rgba(0,0,0,.08);
+    transition:.3s;
+}
+
+.progress-item:hover{
+    transform:translateX(8px);
+}
+
+.badge{
+    display:inline-block;
+    margin-top:8px;
+    background:var(--secondary);
+    color:white;
+    padding:5px 10px;
+    border-radius:20px;
+    font-size:12px;
+}
+
+@keyframes fadeUp{
+    from{
+        opacity:0;
+        transform:translateY(30px);
+    }
+    to{
+        opacity:1;
+        transform:translateY(0);
+    }
+}
+
+.main{
+    max-width:1200px;
+    margin:auto;
+    animation:fadeUp .8s ease;
+}
+
+/* RESPONSIVE */
+@media(max-width:768px){
+    body{
+        flex-direction:column;
+    }
+
+    .sidebar{
+        width:100%;
+        min-height:auto;
+    }
+}
+</style>
+</head>
+
+<body>
+
+<script>
+if(localStorage.getItem("role") !== "parent"){
+    window.location = "index.html";
+}
+</script>
+
+<!-- MAIN -->
+<div class="main">
+
+    <div class="header">
+        <div>
+            <h1>👨‍👩‍👧 Parent Dashboard</h1>
+            <p id="parentName" style="opacity:.9;margin-top:5px;">
+                Welcome Parent
+            </p>
+        </div>
+        <button class="logout" onclick="logout()">Logout</button>
+    </div>
+
+    <!-- STATS -->
+    <div class="stats">
+        <div class="stat-card">
+            <h3>Progress Reports</h3>
+            <h1 id="reportCount">0</h1>
+        </div>
+
+        <div class="stat-card">
+            <h3>Subjects</h3>
+            <h1>3</h1>
+        </div>
+    </div>
+
+    <!-- STUDENT INFO -->
+    <div class="card">
+        <h2>👦 Student Information</h2>
+        <div class="student-info" id="studentInfo">
+            Loading student info...
+        </div>
+    </div>
+
+    <!-- REPORTS -->
+    <div class="card">
+        <h2>📝 Teacher Feedback & Progress Reports</h2>
+        <div id="progressReports">No reports available</div>
+    </div>
+
+</div>
+
+<script>
+
+const channel = new BroadcastChannel("ptcb-sync");
+function loadParentName(){
+    let parentName = localStorage.getItem("userName") || "Parent";
+    document.getElementById("parentName").innerText = `👋 Welcome, ${parentName}`;
+}
+
+loadParentName();
+function logout(){
+    sessionStorage.clear();
+    localStorage.removeItem("role");
+    localStorage.removeItem("userEmail");
+    window.location = "index.html";
+}
+
+function loadReports(){
+    let reports = JSON.parse(localStorage.getItem("updates")) || [];
+    let parentEmail = localStorage.getItem("userEmail");
+
+    let filtered = reports.filter(r => r.parentEmail === parentEmail);
+
+    let container = document.getElementById("progressReports");
+    let countBox = document.getElementById("reportCount");
+
+    if(filtered.length === 0){
+        container.innerHTML = `<p style="color:#777;">No teacher feedback yet.</p>`;
+        countBox.innerText = 0;
+        return;
+    }
+
+    container.innerHTML = filtered.map(r => `
+        <div class="progress-item">
+            <p><b>Student:</b> ${r.studentName}</p>
+            <p><b>Subject:</b> ${r.subject}</p>
+            <p><b>Feedback:</b> ${r.comment}</p>
+            <span class="badge">Updated</span>
+        </div>
+    `).join("");
+
+    countBox.innerText = filtered.length;
+}
+
+function loadStudentInfo(){
+    let students = JSON.parse(localStorage.getItem("students")) || [];
+    let parentEmail = localStorage.getItem("userEmail");
+
+    let child = students.filter(s => s.parentEmail === parentEmail);
+
+    let container = document.getElementById("studentInfo");
+
+    if(child.length === 0){
+        container.innerHTML = "<p>No student linked to this account.</p>";
+        return;
+    }
+
+    container.innerHTML = child.map(s => `
+        <p><b>Name:</b> ${s.name}</p>
+        <p><b>Subject:</b> ${s.subject}</p>
+        <hr>
+    `).join("");
+}
+
+channel.onmessage = (event) => {
+    if(event.data.type === "attendance-update"){
+        localStorage.setItem("attendance", JSON.stringify(event.data.data));
+    }
+};
+
+loadStudentInfo();
+loadReports();
+
+</script>
+
+</body>
+</html>
